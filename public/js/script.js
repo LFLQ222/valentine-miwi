@@ -32,9 +32,9 @@ document.addEventListener('DOMContentLoaded', () => {
     let size = 50;
     let clicks = 0;
 
-    // Initialize button text in Spanish
-    no_button.innerHTML = answers_no[0];
-    yes_button.innerHTML = answers_yes;
+    // Initialize button text in Spanish - replace the <p> tag content
+    no_button.querySelector('p').textContent = answers_no[0];
+    yes_button.querySelector('p').textContent = answers_yes;
 
     no_button.addEventListener('click', () => {
         // Change banner source
@@ -51,15 +51,15 @@ document.addEventListener('DOMContentLoaded', () => {
         yes_button.style.height = `${size}px`;
         yes_button.style.width = `${size}px`;
         let total = answers_no.length;
-        // change button text
+        // change button text - update the <p> tag inside the button
         if (i < total - 1) {
-            no_button.innerHTML = answers_no[i];
+            no_button.querySelector('p').textContent = answers_no[i];
             i++;
         } else if (i === total - 1) {
             alert(answers_no[i]);
             i = 1;
-            no_button.innerHTML = answers_no[0];
-            yes_button.innerHTML = answers_yes;
+            no_button.querySelector('p').textContent = answers_no[0];
+            yes_button.querySelector('p').textContent = answers_yes;
             yes_button.style.height = "50px";
             yes_button.style.width = "50px";
             size = 50;
@@ -67,23 +67,51 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     yes_button.addEventListener('click', () => {
-        // change banner image path
+        // change banner image path - use absolute path from root
         let banner = document.getElementById('banner');
-        banner.src = "./public/images/yes.jpeg";
+        // Try multiple path variations to ensure it loads
+        const imagePaths = [
+            "./public/images/yes.jpeg",
+            "public/images/yes.jpeg",
+            "/public/images/yes.jpeg",
+            "./yes.jpeg"
+        ];
+        
+        let currentPathIndex = 0;
+        const tryLoadImage = () => {
+            if (currentPathIndex < imagePaths.length) {
+                banner.src = imagePaths[currentPathIndex];
+                currentPathIndex++;
+            }
+        };
+        
         banner.onload = () => {
+            console.log("Yes image loaded successfully:", banner.src);
             refreshBanner();
         };
+        
         banner.onerror = () => {
-            console.error("Failed to load yes.jpeg, trying alternative path");
-            banner.src = "public/images/yes.jpeg";
+            console.error("Failed to load yes.jpeg from:", banner.src);
+            if (currentPathIndex < imagePaths.length) {
+                tryLoadImage();
+            } else {
+                console.error("All image paths failed. Check if yes.jpeg exists.");
+            }
         };
+        
+        // Start loading the image
+        tryLoadImage();
         
         // hide buttons div
         let buttons = document.getElementsByClassName('buttons')[0];
-        buttons.style.display = "none";
+        if (buttons) {
+            buttons.style.display = "none";
+        }
         // show message div
         let message = document.getElementsByClassName('message')[0];
-        message.style.display = "block";
+        if (message) {
+            message.style.display = "block";
+        }
         
         // Create heart animation
         createHeartsAnimation();
