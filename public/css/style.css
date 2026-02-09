@@ -116,6 +116,72 @@ body {
     color: #555;
 }
 
+/* Heart Animation Styles */
+.hearts-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 9999;
+    overflow: hidden;
+}
+
+.heart {
+    position: absolute;
+    font-size: 20px;
+    color: #ff1744;
+    animation: floatUp 4s ease-out forwards;
+    pointer-events: none;
+    user-select: none;
+}
+
+.heart::before {
+    content: '❤️';
+}
+
+@keyframes floatUp {
+    0% {
+        opacity: 1;
+        transform: translateY(0) translateX(0) scale(0.5) rotate(0deg);
+    }
+    25% {
+        transform: translateY(-25vh) translateX(calc(var(--random-x, 0px) * 0.5)) scale(0.75) rotate(90deg);
+    }
+    50% {
+        opacity: 1;
+        transform: translateY(-50vh) translateX(var(--random-x, 0px)) scale(1) rotate(180deg);
+    }
+    75% {
+        transform: translateY(-75vh) translateX(calc(var(--random-x, 0px) * 0.5)) scale(1.25) rotate(270deg);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-100vh) translateX(0) scale(1.5) rotate(360deg);
+    }
+}
+
+.heart:nth-child(2n) {
+    color: #e91e63;
+    animation-duration: 3s;
+}
+
+.heart:nth-child(3n) {
+    color: #f06292;
+    animation-duration: 5s;
+}
+
+.heart:nth-child(4n) {
+    color: #ff4081;
+    animation-duration: 4.5s;
+}
+
+.heart:nth-child(5n) {
+    color: #ff1744;
+    animation-duration: 3.5s;
+}
+
 /* CSS For Mobile */
 @media (max-width: 768px) {
     .language-selector {
